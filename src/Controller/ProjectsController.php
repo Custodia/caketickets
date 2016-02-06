@@ -11,6 +11,32 @@ use App\Controller\AppController;
 class ProjectsController extends AppController
 {
 
+    //Individual access rules to projects functions (projects/*).
+    public function isAuthorized($user)
+    {
+        // All registered users can add projects.
+        if ($this->request->action === 'add'){
+            return true;
+        }
+
+        if ($this->request->action === 'edit'){
+            $projectId = (int)$this->request->params['pass'][0];
+            if ($this->Projects->isModeratedBy($projectId, $user['id'])){
+                return true;
+            }
+        }
+
+        // The owner of an article can edit and delete it.
+        if (in_array($this->request->action, ['edit', 'delete'])){
+            $projectId = (int)$this->request->params['pass'][0];
+            if ($this->Projects->isOwnedBy($projectId, $user['id'])){
+                return true;
+            }
+        }
+
+        return parent::isAuthorized($user);
+    }
+
     /**
      * Index method
      *

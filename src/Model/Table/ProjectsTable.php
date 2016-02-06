@@ -18,6 +18,16 @@ use Cake\Validation\Validator;
 class ProjectsTable extends Table
 {
 
+    public function isOwnedBy($projectId, $userId)
+    {
+        return $this->exists(['id' => $projectId, 'user_id' => $userId]);
+    }
+
+    public function isModeratedBy($projectId, $userId)
+    {
+        return false;
+    }
+
     /**
      * Initialize method
      *
