@@ -22,7 +22,7 @@
         </tr>
         <tr>
             <th><?= __('Email') ?></th>
-            <td><?= h($user->email) ?></td>
+            <td><a href="mailto:<?= h($user->email) ?>"><?= h($user->email) ?></a></td>
         </tr>
         <tr>
             <th><?= __('Role') ?></th>
