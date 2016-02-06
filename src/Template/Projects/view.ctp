@@ -53,10 +53,7 @@
                 <th><?= __('Id') ?></th>
                 <th><?= __('Username') ?></th>
                 <th><?= __('Email') ?></th>
-                <th><?= __('Password') ?></th>
                 <th><?= __('Role') ?></th>
-                <th><?= __('Created') ?></th>
-                <th><?= __('Modified') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($project->users as $users): ?>
@@ -64,14 +61,9 @@
                 <td><?= h($users->id) ?></td>
                 <td><?= h($users->username) ?></td>
                 <td><?= h($users->email) ?></td>
-                <td><?= h($users->password) ?></td>
                 <td><?= h($users->role) ?></td>
-                <td><?= h($users->created) ?></td>
-                <td><?= h($users->modified) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => 'Users', 'action' => 'view', $users->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Users', 'action' => 'edit', $users->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Users', 'action' => 'delete', $users->id], ['confirm' => __('Are you sure you want to delete # {0}?', $users->id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
