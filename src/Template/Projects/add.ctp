@@ -17,7 +17,6 @@
         <?php
             echo $this->Form->input('title');
             echo $this->Form->input('body');
-            echo $this->Form->input('user_id');
             echo $this->Form->input('tag_id', ['options' => $tags]);
             echo $this->Form->input('users._ids', ['options' => $users]);
             echo $this->Form->input('tickets._ids', ['options' => $tickets]);
