@@ -19,7 +19,7 @@
     <fieldset>
         <legend><?= __('Edit Tag') ?></legend>
         <?php
-            echo $this->Form->input('parent_id', ['options' => $parentTags, 'empty' => true]);
+            echo $this->Form->input('parent_id', ['options' => $parentTags, 'empty' => 'No parent category.']);
             echo $this->Form->input('name');
             echo $this->Form->input('description');
         ?>
