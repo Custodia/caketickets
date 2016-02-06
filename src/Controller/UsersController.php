@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
 
 /**
  * Users Controller
@@ -10,6 +11,13 @@ use App\Controller\AppController;
  */
 class UsersController extends AppController
 {
+
+
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+        $this->Auth->allow(['add','logout']);
+    }
 
     /**
      * Index method
@@ -61,7 +69,7 @@ class UsersController extends AppController
         $projects = $this->Users->Projects->find('list', ['limit' => 200]);
         $tickets = $this->Users->Tickets->find('list', ['limit' => 200]);
         $this->set(compact('user', 'projects', 'tickets'));
-        $this->set('_serialize', ['user']);
+        $this->set('user', $user);
     }
 
     /**
@@ -88,7 +96,7 @@ class UsersController extends AppController
         $projects = $this->Users->Projects->find('list', ['limit' => 200]);
         $tickets = $this->Users->Tickets->find('list', ['limit' => 200]);
         $this->set(compact('user', 'projects', 'tickets'));
-        $this->set('_serialize', ['user']);
+        $this->set('user', $user);
     }
 
     /**
@@ -108,5 +116,34 @@ class UsersController extends AppController
             $this->Flash->error(__('The user could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * Login method
+     *
+     * Checks if username and password match
+     * and if they do tells Auth what user is logged in.
+     * If they don't displays a error message.
+     */
+    public function login() 
+    {
+        if($this->request->is('post')){
+            $user = $this->Auth->identify();
+            if($user){
+                $this->Auth->setUser($user);
+                return $this->redirect($this->Auth->redirectUrl());
+            }
+            $this->Flash->error(__('Invalid username or password, try again.'));
+        }
+    }
+
+    /**
+     * Logout method.
+     *
+     * Always redirects user to Auths logout url.
+     */
+    public function logout()
+    {
+        return $this->redirect($this->Auth->logout());
     }
 }
