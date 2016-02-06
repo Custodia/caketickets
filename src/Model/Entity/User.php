@@ -35,17 +35,14 @@ class User extends Entity
         'id' => false,
     ];
 
+
+    /**
+     * Always hash all passwords.
+     */
     protected function _setPassword($password)
     {
         return (new DefaultPasswordHasher)->hash($password);
     }
 
-    /**
-     * Fields that are excluded from JSON an array versions of the entity.
-     *
-     * @var array
-     */
-    protected $_hidden = [
-        'password'
-    ];
+
 }
