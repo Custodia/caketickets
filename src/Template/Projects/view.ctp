@@ -78,7 +78,6 @@
                 <th><?= __('Id') ?></th>
                 <th><?= __('Title') ?></th>
                 <th><?= __('Status') ?></th>
-                <th><?= __('Body') ?></th>
                 <th><?= __('Created') ?></th>
                 <th><?= __('Modified') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
@@ -88,7 +87,6 @@
                 <td><?= h($tickets->id) ?></td>
                 <td><?= h($tickets->title) ?></td>
                 <td><?= h($tickets->status) ?></td>
-                <td><?= h($tickets->body) ?></td>
                 <td><?= h($tickets->created) ?></td>
                 <td><?= h($tickets->modified) ?></td>
                 <td class="actions">
