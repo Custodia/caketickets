@@ -29,7 +29,7 @@
             <tr>
                 <td><?= $this->Number->format($user->id) ?></td>
                 <td><?= h($user->username) ?></td>
-                <td><?= h($user->email) ?></td>
+                <td><a href="mailto:<?= h($user->email) ?>"><?= h($user->email) ?></a></td>
                 <td><?= h($user->role) ?></td>
                 <td><?= h($user->created) ?></td>
                 <td><?= h($user->modified) ?></td>
