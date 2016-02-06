@@ -47,6 +47,7 @@ CREATE TABLE tickets (
 CREATE TABLE comments (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	body TEXT,
+	user_id INT,
 	created DATETIME DEFAULT NULL,
 	modified DATETIME DEFAULT NULL
 );
@@ -76,14 +77,12 @@ CREATE TABLE tickets_users (
 	FOREIGN KEY user_ticket_key(user_id) REFERENCES users(id)
 );
 
-CREATE TABLE tickets_users_comments (
+CREATE TABLE tickets_comments (
 	ticket_id INT NOT NULL,
-	user_id INT NOT NULL,
 	comment_id INT NOT NULL,
-	PRIMARY KEY (ticket_id, user_id, comment_id),
+	PRIMARY KEY (ticket_id, comment_id),
 	UNIQUE KEY (comment_id),
 	FOREIGN KEY ticket_comment_key(ticket_id) REFERENCES tickets(id),
-	FOREIGN KEY user_comment_key(user_id) REFERENCES users(id),
 	FOREIGN KEY comment_ticket_key(comment_id) REFERENCES comments(id)
-)
+);
 ```
