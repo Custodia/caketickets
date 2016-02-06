@@ -18,7 +18,8 @@
             echo $this->Form->input('username');
             echo $this->Form->input('email');
             echo $this->Form->input('password');
-            echo $this->Form->input('role');
+            echo $this->Form->input('role', [
+                'options' => ['Admin' => 'Admin', 'User' => 'User']]);
             echo $this->Form->input('projects._ids', ['options' => $projects]);
             echo $this->Form->input('tickets._ids', ['options' => $tickets]);
         ?>
