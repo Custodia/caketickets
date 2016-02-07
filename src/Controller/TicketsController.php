@@ -18,7 +18,24 @@ class TicketsController extends AppController
      */
     public function index()
     {
-        $tickets = $this->paginate($this->Tickets);
+
+        // If no parameters passed show everything.
+        // Else use the status specified
+        if ( empty($this->request->params['pass'])) {
+            $status = 'All';
+        } else {
+            $status = $this->request->params['pass'][0];
+        }
+
+        // Get title queries from passed parameters.
+        $queries = $this->request->params['pass'];
+        array_shift($queries);
+
+
+        // Filter tickets by parameters we got above.
+        $this->set('tickets', $this->paginate($this->Tickets
+            ->find('byStatus',['status' =>$status])
+            ->find('byTitle',['queries' => $queries])));
 
         $this->set(compact('tickets'));
         $this->set('_serialize', ['tickets']);
@@ -46,7 +63,7 @@ class TicketsController extends AppController
      *
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function add($projectId)
     {
         $ticket = $this->Tickets->newEntity();
         if ($this->request->is('post')) {
@@ -58,7 +75,10 @@ class TicketsController extends AppController
                 $this->Flash->error(__('The ticket could not be saved. Please, try again.'));
             }
         }
-        $projects = $this->Tickets->Projects->find('list', ['limit' => 200]);
+        $projects = $this->Tickets->Projects->find(
+            'list', ['limit' => 200])
+            ->where(['id' => $projectId]);
+        $this->set('projectId', $projectId);
         $comments = $this->Tickets->Comments->find('list', ['limit' => 200]);
         $users = $this->Tickets->Users->find('list', ['limit' => 200]);
         $this->set(compact('ticket', 'projects', 'comments', 'users'));

@@ -29,7 +29,7 @@ class UsersTable extends Table
         parent::initialize($config);
 
         $this->table('users');
-        $this->displayField('id');
+        $this->displayField('username');
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
@@ -66,7 +66,7 @@ class UsersTable extends Table
 
         $validator
             ->requirePresence('username', 'create')
-            ->notEmpty('username')
+            ->notEmpty('username', 'A username is required.')
             ->add('username', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator
@@ -77,10 +77,14 @@ class UsersTable extends Table
 
         $validator
             ->requirePresence('password', 'create')
-            ->notEmpty('password');
+            ->notEmpty('password', 'A password is required.');
 
         $validator
-            ->allowEmpty('role');
+            ->notEmpty('role', 'A role is required.')
+            ->add('role', 'inList', [
+                'rule' => ['inList',['Admin', 'User']],
+                'message' => 'Please enter a valid role.'
+            ]);
 
         return $validator;
     }

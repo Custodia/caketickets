@@ -47,8 +47,44 @@ Router::scope('/', function ($routes) {
      * its action called 'display', and we pass a param to select the view file
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
-    $routes->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
+    $routes->connect('/', ['controller' => 'Projects', 'action' => 'index']);
 
+    Router::scope('/tickets', ['Controller' => 'Tickets'],
+        function ($routes) {
+            $routes->connect('/add', ['controller' => 'Tickets', 'action' => 'add']);
+            $routes->connect('/Add', ['controller' => 'Tickets', 'action' => 'add']);
+
+            $routes->connect('/edit/*', ['controller' => 'Tickets', 'action' => 'edit']); 
+            $routes->connect('/Edit/*', ['controller' => 'Tickets', 'action' => 'edit']); 
+
+            $routes->connect('/view', ['controller' => 'Tickets', 'action' => 'index']);
+            $routes->connect('/View', ['controller' => 'Tickets', 'action' => 'index']);
+
+            $routes->connect('/view/*', ['controller' => 'Tickets', 'action' => 'view']);
+            $routes->connect('/View/*', ['controller' => 'Tickets', 'action' => 'view']);
+
+            $routes->connect(
+                '/',
+                ['controller' => 'Tickets', 'action' => 'index'],
+                ['pass' => ['all']]
+            );
+
+            $routes->connect(
+                '/:id/*',
+                ['controller' => 'Tickets', 'action' => 'index'],
+                ['pass' => ['id']]
+            );
+        }
+    );
+
+    $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
+    $routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout']);
+    $routes->connect('/register', ['controller' => 'Users', 'action' => 'add']);
+
+    $routes->connect('/admin/add', ['controller' => 'Users', 'action' => 'adminAdd']);
+    $routes->connect('/admin/edit/*', ['controller' => 'Users', 'action' => 'adminEdit']);
+
+    $routes->connect('/tickets/add/*', ['controller' => 'Tickets', 'action' => 'add']);
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */

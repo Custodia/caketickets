@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
 
 /**
  * Users Controller
@@ -10,6 +11,13 @@ use App\Controller\AppController;
  */
 class UsersController extends AppController
 {
+
+
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+        $this->Auth->allow(['add','logout']);
+    }
 
     /**
      * Index method
@@ -34,7 +42,7 @@ class UsersController extends AppController
     public function view($id = null)
     {
         $user = $this->Users->get($id, [
-            'contain' => ['Projects', 'Tickets', 'TicketsComments']
+            'contain' => ['Projects', 'Tickets']
         ]);
 
         $this->set('user', $user);
@@ -51,6 +59,25 @@ class UsersController extends AppController
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->data);
+            $user->role = 'User';
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('The user has been saved.'));
+                return $this->redirect(['controller' => 'Projects', 'action' => 'index']);
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }
+        }
+        $projects = $this->Users->Projects->find('list', ['limit' => 200]);
+        $tickets = $this->Users->Tickets->find('list', ['limit' => 200]);
+        $this->set(compact('user', 'projects', 'tickets'));
+        $this->set('user', $user);
+    }
+
+    public function adminAdd()
+    {
+        $user = $this->Users->newEntity();
+        if ($this->request->is('post')) {
+            $user = $this->Users->patchEntity($user, $this->request->data);
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -61,7 +88,27 @@ class UsersController extends AppController
         $projects = $this->Users->Projects->find('list', ['limit' => 200]);
         $tickets = $this->Users->Tickets->find('list', ['limit' => 200]);
         $this->set(compact('user', 'projects', 'tickets'));
-        $this->set('_serialize', ['user']);
+        $this->set('user', $user);
+    }
+
+    public function adminEdit($id = null)
+    {
+        $user = $this->Users->get($id, [
+            'contain' => ['Projects', 'Tickets']
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $user = $this->Users->patchEntity($user, $this->request->data);
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('The user has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }
+        }
+        $projects = $this->Users->Projects->find('list', ['limit' => 200]);
+        $tickets = $this->Users->Tickets->find('list', ['limit' => 200]);
+        $this->set(compact('user', 'projects', 'tickets'));
+        $this->set('user', $user);
     }
 
     /**
@@ -80,7 +127,7 @@ class UsersController extends AppController
             $user = $this->Users->patchEntity($user, $this->request->data);
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => 'Projects', 'action' => 'index']);
             } else {
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
@@ -88,7 +135,7 @@ class UsersController extends AppController
         $projects = $this->Users->Projects->find('list', ['limit' => 200]);
         $tickets = $this->Users->Tickets->find('list', ['limit' => 200]);
         $this->set(compact('user', 'projects', 'tickets'));
-        $this->set('_serialize', ['user']);
+        $this->set('user', $user);
     }
 
     /**
@@ -108,5 +155,34 @@ class UsersController extends AppController
             $this->Flash->error(__('The user could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * Login method
+     *
+     * Checks if username and password match
+     * and if they do tells Auth what user is logged in.
+     * If they don't displays a error message.
+     */
+    public function login() 
+    {
+        if($this->request->is('post')){
+            $user = $this->Auth->identify();
+            if($user){
+                $this->Auth->setUser($user);
+                return $this->redirect($this->Auth->redirectUrl());
+            }
+            $this->Flash->error(__('Invalid username or password, try again.'));
+        }
+    }
+
+    /**
+     * Logout method.
+     *
+     * Always redirects user to Auths logout url.
+     */
+    public function logout()
+    {
+        return $this->redirect($this->Auth->logout());
     }
 }

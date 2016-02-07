@@ -10,7 +10,7 @@
         <li><?= $this->Html->link(__('List Users'), ['controller' => 'Users', 'action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?> </li>
         <li><?= $this->Html->link(__('List Tickets'), ['controller' => 'Tickets', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Ticket'), ['controller' => 'Tickets', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('New Ticket'), ['controller' => 'Tickets', 'action' => 'add', $project->id]) ?> </li>
     </ul>
 </nav>
 <div class="projects view large-9 medium-8 columns content">
@@ -53,10 +53,7 @@
                 <th><?= __('Id') ?></th>
                 <th><?= __('Username') ?></th>
                 <th><?= __('Email') ?></th>
-                <th><?= __('Password') ?></th>
                 <th><?= __('Role') ?></th>
-                <th><?= __('Created') ?></th>
-                <th><?= __('Modified') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($project->users as $users): ?>
@@ -64,14 +61,10 @@
                 <td><?= h($users->id) ?></td>
                 <td><?= h($users->username) ?></td>
                 <td><?= h($users->email) ?></td>
-                <td><?= h($users->password) ?></td>
                 <td><?= h($users->role) ?></td>
-                <td><?= h($users->created) ?></td>
-                <td><?= h($users->modified) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => 'Users', 'action' => 'view', $users->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Users', 'action' => 'edit', $users->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Users', 'action' => 'delete', $users->id], ['confirm' => __('Are you sure you want to delete # {0}?', $users->id)]) ?>
+                    <?= $this->Form->postLink(__('Toggle role'), ['controller' => 'ProjectsUsers', 'action' => 'toggle', $project->id, $users->id]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -86,7 +79,6 @@
                 <th><?= __('Id') ?></th>
                 <th><?= __('Title') ?></th>
                 <th><?= __('Status') ?></th>
-                <th><?= __('Body') ?></th>
                 <th><?= __('Created') ?></th>
                 <th><?= __('Modified') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
@@ -96,7 +88,6 @@
                 <td><?= h($tickets->id) ?></td>
                 <td><?= h($tickets->title) ?></td>
                 <td><?= h($tickets->status) ?></td>
-                <td><?= h($tickets->body) ?></td>
                 <td><?= h($tickets->created) ?></td>
                 <td><?= h($tickets->modified) ?></td>
                 <td class="actions">
