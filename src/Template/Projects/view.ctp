@@ -64,6 +64,7 @@
                 <td><?= h($users->role) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => 'Users', 'action' => 'view', $users->id]) ?>
+                    <?= $this->Form->postLink(__('Toggle role'), ['controller' => 'ProjectsUsers', 'action' => 'toggle', $project->id, $users->id]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
