@@ -49,6 +49,22 @@ Router::scope('/', function ($routes) {
      */
     $routes->connect('/', ['controller' => 'Projects', 'action' => 'index']);
 
+    Router::scope('/tickets', ['Controller' => 'Tickets'],
+        function ($routes) {
+            $routes->connect(
+                '/',
+                ['controller' => 'Tickets', 'action' => 'index'],
+                ['pass' => ['all']]
+            );
+
+            $routes->connect(
+                '/:id',
+                ['controller' => 'Tickets', 'action' => 'index'],
+                ['pass' => ['id']]
+            );
+        }
+    );
+
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */
