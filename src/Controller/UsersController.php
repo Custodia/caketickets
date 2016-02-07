@@ -72,6 +72,44 @@ class UsersController extends AppController
         $this->set('user', $user);
     }
 
+    public function adminAdd()
+    {
+        $user = $this->Users->newEntity();
+        if ($this->request->is('post')) {
+            $user = $this->Users->patchEntity($user, $this->request->data);
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('The user has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }
+        }
+        $projects = $this->Users->Projects->find('list', ['limit' => 200]);
+        $tickets = $this->Users->Tickets->find('list', ['limit' => 200]);
+        $this->set(compact('user', 'projects', 'tickets'));
+        $this->set('user', $user);
+    }
+
+    public function adminEdit($id = null)
+    {
+        $user = $this->Users->get($id, [
+            'contain' => ['Projects', 'Tickets']
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $user = $this->Users->patchEntity($user, $this->request->data);
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('The user has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }
+        }
+        $projects = $this->Users->Projects->find('list', ['limit' => 200]);
+        $tickets = $this->Users->Tickets->find('list', ['limit' => 200]);
+        $this->set(compact('user', 'projects', 'tickets'));
+        $this->set('user', $user);
+    }
+
     /**
      * Edit method
      *
