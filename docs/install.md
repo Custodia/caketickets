@@ -66,7 +66,8 @@ CREATE TABLE projects_tickets (
 	ticket_id INT NOT NULL,
 	PRIMARY KEY (project_id, ticket_id),
 	FOREIGN KEY project_ticket_key(project_id) REFERENCES projects(id),
-	FOREIGN KEY ticket_project_key(ticket_id) REFERENCES tickets(id)
+	FOREIGN KEY ticket_project_key(ticket_id) REFERENCES tickets(id),
+	UNIQUE KEY (ticket_id)
 );
 
 CREATE TABLE tickets_users (
