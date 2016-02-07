@@ -17,25 +17,26 @@ use Cake\Validation\Validator;
 class TicketsTable extends Table
 {
 
-    public function findAll(Query $query, array $options)
+    public function findByTitle(Query $query, array $options)
     {
+        $queries = $options['queries'];
+
+        foreach ($queries as $index){
+            $index = '%' . $index . '%';
+            $query = $query->where(['title LIKE' => $index]);
+        }
+
         return $query;
     }
 
-    // Returns a query that checks if the status is new.
-    public function findNew(Query $query, array $options)
+    public function findByStatus(Query $query, array $options) 
     {
-        return $query->where(['status' => 'New']);
-    }
-
-    public function findPending(Query $query, array $options)
-    {
-        return $query->where(['status' => 'Pending']);
-    }
-
-    public function findDone(Query $query, array $options)
-    {
-        return $query->where(['status' => 'Done']);
+        $status = $options['status'];
+        if (ucfirst($status) === 'All'){
+            return $query;
+        } else {
+            return $query->where(['status' => ucfirst($status)]);
+        }
     }
 
     /**
