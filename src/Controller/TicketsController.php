@@ -63,7 +63,7 @@ class TicketsController extends AppController
      *
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function add($projectId)
     {
         $ticket = $this->Tickets->newEntity();
         if ($this->request->is('post')) {
@@ -75,7 +75,10 @@ class TicketsController extends AppController
                 $this->Flash->error(__('The ticket could not be saved. Please, try again.'));
             }
         }
-        $projects = $this->Tickets->Projects->find('list', ['limit' => 200]);
+        $projects = $this->Tickets->Projects->find(
+            'list', ['limit' => 200])
+            ->where(['id' => $projectId]);
+        $this->set('projectId', $projectId);
         $comments = $this->Tickets->Comments->find('list', ['limit' => 200]);
         $users = $this->Tickets->Users->find('list', ['limit' => 200]);
         $this->set(compact('ticket', 'projects', 'comments', 'users'));
