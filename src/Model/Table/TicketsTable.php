@@ -17,6 +17,27 @@ use Cake\Validation\Validator;
 class TicketsTable extends Table
 {
 
+    public function findAll(Query $query, array $options)
+    {
+        return $query;
+    }
+
+    // Returns a query that checks if the status is new.
+    public function findNew(Query $query, array $options)
+    {
+        return $query->where(['status' => 'New']);
+    }
+
+    public function findPending(Query $query, array $options)
+    {
+        return $query->where(['status' => 'Pending']);
+    }
+
+    public function findDone(Query $query, array $options)
+    {
+        return $query->where(['status' => 'Done']);
+    }
+
     /**
      * Initialize method
      *
