@@ -55,7 +55,7 @@ CREATE TABLE comments (
 CREATE TABLE projects_users (
 	project_id INT NOT NULL,
 	user_id INT NOT NULL,
-	role VARCHAR(10),
+	role VARCHAR(10) DEFAULT 'User',
 	PRIMARY KEY (project_id, user_id),
 	FOREIGN KEY project_user_key(project_id) REFERENCES projects(id),
 	FOREIGN KEY user_project_key(user_id) REFERENCES users(id)
@@ -66,7 +66,8 @@ CREATE TABLE projects_tickets (
 	ticket_id INT NOT NULL,
 	PRIMARY KEY (project_id, ticket_id),
 	FOREIGN KEY project_ticket_key(project_id) REFERENCES projects(id),
-	FOREIGN KEY ticket_project_key(ticket_id) REFERENCES tickets(id)
+	FOREIGN KEY ticket_project_key(ticket_id) REFERENCES tickets(id),
+	UNIQUE KEY (ticket_id)
 );
 
 CREATE TABLE tickets_users (

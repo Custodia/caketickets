@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * Projects Controller
@@ -10,6 +11,45 @@ use App\Controller\AppController;
  */
 class ProjectsController extends AppController
 {
+
+    //Individual access rules to projects functions (projects/*).
+    public function isAuthorized($user)
+    {
+        // All registered users can add projects and view the index.
+        if (in_array($this->request->action, ['add', 'index'])){
+            return true;
+        }
+
+        // The owner of an article can edit and delete it.
+        if (in_array($this->request->action, ['view', 'edit', 'delete'])){
+            $projectId = (int)$this->request->params['pass'][0];
+            if ($this->Projects->isOwnedBy($projectId, $user['id'])){
+                return true;
+            }
+        }
+
+        $ProjectsUsers = TableRegistry::get('ProjectsUsers');
+
+        // Check from the ProjectsUsers table if the person trying to access
+        // is a moderator of that project.
+        if (in_array($this->request->action, ['view', 'edit'])){
+            $projectId = (int)$this->request->params['pass'][0];
+            if ($ProjectsUsers->isModeratedBy($projectId, $user['id'])){
+                return true;
+            }
+        }
+
+        // Check from the ProjectsUsers table if the person trying to access
+        // is assigned to that project.
+        if (in_array($this->request->action, ['view'])){
+            $projectId = (int)$this->request->params['pass'][0];
+            if ($ProjectsUsers->isAssignedTo($projectId, $user['id'])){
+                return true;
+            }
+        }
+
+        return parent::isAuthorized($user);
+    }
 
     /**
      * Index method
