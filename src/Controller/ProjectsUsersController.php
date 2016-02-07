@@ -15,7 +15,7 @@ class ProjectsUsersController extends AppController
     //Individual access rules for this controller.
     public function isAuthorized($user)
     {
-        // All registered users can add projects and view the index.
+        // Only the project owner can toggle admin status.
         if ($this->request->action === 'toggle'){
             $Projects = TableRegistry::get('Projects');
 
@@ -26,6 +26,7 @@ class ProjectsUsersController extends AppController
             }
         }
 
+        // Defaults if none of the above qualify.
         return parent::isAuthorized($user);
     }
 
