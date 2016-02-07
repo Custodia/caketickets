@@ -82,6 +82,7 @@ class AppController extends Controller
 
         // If not admin, default deny.
         return false;
+
     }
 
     /**

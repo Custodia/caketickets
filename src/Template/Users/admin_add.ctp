@@ -18,6 +18,10 @@
             echo $this->Form->input('username');
             echo $this->Form->input('email');
             echo $this->Form->input('password');
+            echo $this->Form->input('role', [
+                'options' => ['User' => 'User', 'Admin' => 'Admin']]);
+            echo $this->Form->input('projects._ids', ['options' => $projects]);
+            echo $this->Form->input('tickets._ids', ['options' => $tickets]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
