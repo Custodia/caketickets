@@ -16,10 +16,27 @@ use Cake\Validation\Validator;
 class ProjectsUsersTable extends Table
 {
 
-
+    /*
+     * Is the given user a moderator for the
+     * given project.
+     */
     public function isModeratedBy($projectId, $userId)
     {
-        return true;
+        return $this->exists([
+            'project_id' => $projectId, 
+            'user_id' => $userId, 
+            'role' => 'Admin']);
+    }
+
+    /*
+     * Is the given user assigned to the
+     * given project.
+     */
+    public function isAssignedTo($projectId, $userId)
+    {
+        return $this->exists([
+            'project_id' => $projectId, 
+            'user_id' => $userId]);
     }
 
     /**

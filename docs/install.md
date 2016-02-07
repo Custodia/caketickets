@@ -55,7 +55,7 @@ CREATE TABLE comments (
 CREATE TABLE projects_users (
 	project_id INT NOT NULL,
 	user_id INT NOT NULL,
-	role VARCHAR(10),
+	role VARCHAR(10) DEFAULT 'User',
 	PRIMARY KEY (project_id, user_id),
 	FOREIGN KEY project_user_key(project_id) REFERENCES projects(id),
 	FOREIGN KEY user_project_key(user_id) REFERENCES users(id)
