@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * Tickets Controller
@@ -18,8 +19,10 @@ class TicketsController extends AppController
      */
     public function index()
     {
-        $tickets = $this->paginate($this->Tickets);
 
+        $this->paginate();
+
+        $this->set('tickets', $this->paginate($this->Tickets->find('all')));
         $this->set(compact('tickets'));
         $this->set('_serialize', ['tickets']);
     }
