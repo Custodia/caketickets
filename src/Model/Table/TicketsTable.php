@@ -17,6 +17,28 @@ use Cake\Validation\Validator;
 class TicketsTable extends Table
 {
 
+    public function findByTitle(Query $query, array $options)
+    {
+        $queries = $options['queries'];
+
+        foreach ($queries as $index){
+            $index = '%' . $index . '%';
+            $query = $query->where(['title LIKE' => $index]);
+        }
+
+        return $query;
+    }
+
+    public function findByStatus(Query $query, array $options) 
+    {
+        $status = $options['status'];
+        if (ucfirst($status) === 'All'){
+            return $query;
+        } else {
+            return $query->where(['status' => ucfirst($status)]);
+        }
+    }
+
     /**
      * Initialize method
      *

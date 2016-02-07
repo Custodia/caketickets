@@ -18,7 +18,24 @@ class TicketsController extends AppController
      */
     public function index()
     {
-        $tickets = $this->paginate($this->Tickets);
+
+        // If no parameters passed show everything.
+        // Else use the status specified
+        if ( empty($this->request->params['pass'])) {
+            $status = 'All';
+        } else {
+            $status = $this->request->params['pass'][0];
+        }
+
+        // Get title queries from passed parameters.
+        $queries = $this->request->params['pass'];
+        array_shift($queries);
+
+
+        // Filter tickets by parameters we got above.
+        $this->set('tickets', $this->paginate($this->Tickets
+            ->find('byStatus',['status' =>$status])
+            ->find('byTitle',['queries' => $queries])));
 
         $this->set(compact('tickets'));
         $this->set('_serialize', ['tickets']);
