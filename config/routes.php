@@ -51,6 +51,18 @@ Router::scope('/', function ($routes) {
 
     Router::scope('/tickets', ['Controller' => 'Tickets'],
         function ($routes) {
+            $routes->connect('/add', ['controller' => 'Tickets', 'action' => 'add']);
+            $routes->connect('/Add', ['controller' => 'Tickets', 'action' => 'add']);
+
+            $routes->connect('/edit/*', ['controller' => 'Tickets', 'action' => 'edit']); 
+            $routes->connect('/Edit/*', ['controller' => 'Tickets', 'action' => 'edit']); 
+
+            $routes->connect('/view', ['controller' => 'Tickets', 'action' => 'index']);
+            $routes->connect('/View', ['controller' => 'Tickets', 'action' => 'index']);
+
+            $routes->connect('/view/*', ['controller' => 'Tickets', 'action' => 'view']);
+            $routes->connect('/View/*', ['controller' => 'Tickets', 'action' => 'view']);
+
             $routes->connect(
                 '/',
                 ['controller' => 'Tickets', 'action' => 'index'],
