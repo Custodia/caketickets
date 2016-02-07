@@ -26,21 +26,16 @@ class TicketsController extends AppController
         } else {
             $status = $this->request->params['pass'][0];
         }
-        
+
         // Get title queries from passed parameters.
         $queries = $this->request->params['pass'];
         array_shift($queries);
 
 
-        // Filter tickets by status
-        $this->set('tickets', $this->paginate($this->Tickets->find($status)));
-
-        // And after that by every search word.
-        foreach ($queries as $query) {
-            $query = '%' . $query . '%';
-            $this->set('tickets', $this->paginate($this->Tickets->find()
-                ->where(['title LIKE' => $query])));
-        }
+        // Filter tickets by parameters we got above.
+        $this->set('tickets', $this->paginate($this->Tickets
+            ->find('byStatus',['status' =>$status])
+            ->find('byTitle',['queries' => $queries])));
 
         $this->set(compact('tickets'));
         $this->set('_serialize', ['tickets']);
