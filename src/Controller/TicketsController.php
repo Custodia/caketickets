@@ -19,17 +19,32 @@ class TicketsController extends AppController
     public function index()
     {
 
-        //debug($this->request->params['pass']);
+        debug($this->request->params['pass']);
 
         if ( empty($this->request->params['pass'])) {
             $status = 'All';
         } else {
             $status = $this->request->params['pass'][0];
         }
+        
+        debug($status);
+
+        $queries = $this->request->params['pass'];
+        array_shift($queries);
+
+        debug($queries); 
 
         $this->paginate();
 
-        $this->set('tickets', $this->paginate($this->Tickets->find($status)));
+        $this->set('tickets', $this->paginate($this->Tickets->find($status)
+            ));
+
+        foreach ($queries as $query) {
+            $query = '%' . $query . '%';
+            $this->set('tickets', $this->paginate($this->Tickets->find()
+                ->where(['title LIKE' => $query])));
+        }
+        
         $this->set(compact('tickets'));
         $this->set('_serialize', ['tickets']);
     }

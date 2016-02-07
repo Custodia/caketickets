@@ -58,7 +58,7 @@ Router::scope('/', function ($routes) {
             );
 
             $routes->connect(
-                '/:id',
+                '/:id/*',
                 ['controller' => 'Tickets', 'action' => 'index'],
                 ['pass' => ['id']]
             );
