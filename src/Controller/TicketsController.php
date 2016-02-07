@@ -19,7 +19,7 @@ class TicketsController extends AppController
     public function index()
     {
 
-        debug($this->request->params['pass']);
+        //debug($this->request->params['pass']);
 
         if ( empty($this->request->params['pass'])) {
             $status = 'All';
@@ -27,12 +27,12 @@ class TicketsController extends AppController
             $status = $this->request->params['pass'][0];
         }
         
-        debug($status);
+        //debug($status);
 
         $queries = $this->request->params['pass'];
         array_shift($queries);
 
-        debug($queries); 
+        //debug($queries); 
 
         $this->paginate();
 
@@ -44,7 +44,7 @@ class TicketsController extends AppController
             $this->set('tickets', $this->paginate($this->Tickets->find()
                 ->where(['title LIKE' => $query])));
         }
-        
+
         $this->set(compact('tickets'));
         $this->set('_serialize', ['tickets']);
     }
