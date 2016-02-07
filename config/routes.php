@@ -78,12 +78,13 @@ Router::scope('/', function ($routes) {
     );
 
     $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
+    $routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout']);
     $routes->connect('/register', ['controller' => 'Users', 'action' => 'add']);
 
     $routes->connect('/admin/add', ['controller' => 'Users', 'action' => 'adminAdd']);
     $routes->connect('/admin/edit/*', ['controller' => 'Users', 'action' => 'adminEdit']);
 
-
+    $routes->connect('/tickets/add/*', ['controller' => 'Tickets', 'action' => 'add']);
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */

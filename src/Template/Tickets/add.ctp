@@ -19,7 +19,7 @@
             echo $this->Form->input('status', ['options' => [
                 'New' => 'New', 'Pending' => 'Pending', 'Done' => 'Done']]);
             echo $this->Form->input('body');
-            echo $this->Form->input('projects._ids', ['options' => $projects]);
+            echo $this->Form->input('projects._ids', ['options' => $projects, 'default' => $projectId]);
             //echo $this->Form->input('comments._ids', ['options' => $comments]);
             echo $this->Form->input('users._ids', ['options' => $users]);
         ?>
