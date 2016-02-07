@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * ProjectsUsers Controller
@@ -10,6 +11,23 @@ use App\Controller\AppController;
  */
 class ProjectsUsersController extends AppController
 {
+
+    //Individual access rules for this controller.
+    public function isAuthorized($user)
+    {
+        // All registered users can add projects and view the index.
+        if ($this->request->action === 'toggle'){
+            $Projects = TableRegistry::get('Projects');
+
+            $projectId = $this->request->params['pass'][0];
+            $userId = $this->Auth->user('id');
+            if ($Projects->isOwnedBy($projectId, $userId)){
+                return true;
+            }
+        }
+
+        return parent::isAuthorized($user);
+    }
 
     public function toggle()
     {
