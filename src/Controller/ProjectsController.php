@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use App\Model\Table\ProjectsUsers;
 
 /**
  * Projects Controller
@@ -19,17 +20,19 @@ class ProjectsController extends AppController
             return true;
         }
 
-        if ($this->request->action === 'edit'){
-            $projectId = (int)$this->request->params['pass'][0];
-            if ($this->Projects->isModeratedBy($projectId, $user['id'])){
-                return true;
-            }
-        }
-
         // The owner of an article can edit and delete it.
         if (in_array($this->request->action, ['edit', 'delete'])){
             $projectId = (int)$this->request->params['pass'][0];
             if ($this->Projects->isOwnedBy($projectId, $user['id'])){
+                return true;
+            }
+        }
+
+        // Check from the ProjectsUsers table if the person trying to access
+        // is a moderator of that project.
+        if ($this->request->action === 'edit'){
+            $projectId = (int)$this->request->params['pass'][0];
+            if ($this->ProjectsUsers->isModeratedBy($projectId, $user['id'])){
                 return true;
             }
         }

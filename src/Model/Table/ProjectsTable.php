@@ -23,11 +23,6 @@ class ProjectsTable extends Table
         return $this->exists(['id' => $projectId, 'user_id' => $userId]);
     }
 
-    public function isModeratedBy($projectId, $userId)
-    {
-        return false;
-    }
-
     /**
      * Initialize method
      *
