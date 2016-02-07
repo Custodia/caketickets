@@ -77,6 +77,10 @@ Router::scope('/', function ($routes) {
         }
     );
 
+    $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
+    $routes->connect('/register', ['controller' => 'Users', 'action' => 'add']);
+
+
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */
