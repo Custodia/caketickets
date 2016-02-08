@@ -154,21 +154,15 @@ class TicketsController extends AppController
         $projectId = $this->Tickets->ProjectsTickets->find()
             ->where(['ticket_id' => $id])
             ->first()['project_id'];
-        debug($id);
-        debug($projectId);
 
-
-        //$ProjectsUsers = TableRegistry::get('ProjectsUsers');
-
+        // Filter users by if they are involved in a project.
         $users = $this->Tickets->Users
             ->find('list', ['limit' => 200, 'projectId' => $projectId])
             ->innerJoinWith(
-                'ProjectsUsers', function($q){
-                    return $q;//->where(['ProjectsUsers.project_id' => $projectId]);
+                'ProjectsUsers', function($q) use( &$projectId){
+                    return $q->where(['ProjectsUsers.project_id' => $projectId]);
                 }
             );
-
-        debug($users); 
 
         $this->set(compact('ticket', 'projects', 'comments', 'users'));
         $this->set('_serialize', ['ticket']);
