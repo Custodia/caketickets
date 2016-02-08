@@ -20,7 +20,7 @@ class ProjectsController extends AppController
             return true;
         }
 
-        // The owner of an article can edit and delete it.
+        // The owner of an project can edit and delete it.
         if (in_array($this->request->action, ['view', 'edit', 'delete'])){
             $projectId = (int)$this->request->params['pass'][0];
             if ($this->Projects->isOwnedBy($projectId, $user['id'])){

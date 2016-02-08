@@ -11,6 +11,47 @@ use App\Controller\AppController;
 class TicketsController extends AppController
 {
 
+    //Individual access rules to tickets functions (tickets/*).
+    public function isAuthorized($user)
+    {
+        // All registered users can view the index.
+        if (in_array($this->request->action, ['index'])){
+            return true;
+        }
+
+        // The owner of an project can do anything related to it's tickets.
+        
+        //if (in_array($this->request->action, ['view', 'edit', 'delete'])){
+        //    $projectId = (int)$this->request->params['pass'][0];
+        //    if ($this->Projects->isOwnedBy($projectId, $user['id'])){
+        //        return true;
+        //    }
+        //}
+
+        $TicketsUsers = TableRegistry::get('TicketsUsers');
+
+        // A moderator of a project can add and edit tickets.
+        
+        //if (in_array($this->request->action, ['add', 'edit'])){
+        //    $projectId = (int)$this->request->params['pass'][0];
+        //    if ($ProjectsUsers->isModeratedBy($projectId, $user['id'])){
+        //        return true;
+        //    }
+        //}
+
+        // Users assigned to tickets can view them.
+
+        if (in_array($this->request->action, ['view'])){
+            $ticketId = (int)$this->request->params['pass'][0];
+            if ($TicketsUsers->isAssignedTo($ticketId, $user['id'])){
+                return true;
+            }
+        }
+
+        // Otherwise default to Admin -> true, User -> false
+        return parent::isAuthorized($user);
+    }
+
     /**
      * Index method
      *
