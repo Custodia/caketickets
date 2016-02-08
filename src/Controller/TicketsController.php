@@ -121,7 +121,15 @@ class TicketsController extends AppController
             ->where(['id' => $projectId]);
         $this->set('projectId', $projectId);
         $comments = $this->Tickets->Comments->find('list', ['limit' => 200]);
-        $users = $this->Tickets->Users->find('list', ['limit' => 200]);
+        
+        $users = $this->Tickets->Users
+            ->find('list', ['limit' => 200])
+            ->innerJoinWith(
+                'ProjectsUsers', function($q) use( &$projectId){
+                    return $q->where(['ProjectsUsers.project_id' => $projectId]);
+                }
+            );
+        
         $this->set(compact('ticket', 'projects', 'comments', 'users'));
         $this->set('_serialize', ['ticket']);
     }
@@ -157,7 +165,7 @@ class TicketsController extends AppController
 
         // Filter users by if they are involved in a project.
         $users = $this->Tickets->Users
-            ->find('list', ['limit' => 200, 'projectId' => $projectId])
+            ->find('list', ['limit' => 200])
             ->innerJoinWith(
                 'ProjectsUsers', function($q) use( &$projectId){
                     return $q->where(['ProjectsUsers.project_id' => $projectId]);
