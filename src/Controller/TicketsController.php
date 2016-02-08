@@ -20,31 +20,54 @@ class TicketsController extends AppController
             return true;
         }
 
-        // The owner of an project can do anything related to it's tickets.
-        
-        //if (in_array($this->request->action, ['view', 'edit', 'delete'])){
-        //    $projectId = (int)$this->request->params['pass'][0];
-        //    if ($this->Projects->isOwnedBy($projectId, $user['id'])){
-        //        return true;
-        //    }
-        //}
+        $Projects = TableRegistry::get('Projects');
+        $ProjectsUsers = TableRegistry::get('ProjectsUsers');
 
-        $TicketsUsers = TableRegistry::get('TicketsUsers');
-
-        // A moderator of a project can add and edit tickets.
-        
-        //if (in_array($this->request->action, ['add', 'edit'])){
-        //    $projectId = (int)$this->request->params['pass'][0];
-        //    if ($ProjectsUsers->isModeratedBy($projectId, $user['id'])){
-        //        return true;
-        //    }
-        //}
-
-        // Users assigned to tickets can view them.
-        if (in_array($this->request->action, ['view'])){
-            $ticketId = (int)$this->request->params['pass'][0];
-            if ($TicketsUsers->isAssignedTo($ticketId, $user['id'])){
+        if (in_array($this->request->action, ['add'])){
+            $projectId = (int)$this->request->params['pass'][0];
+            
+            if ($Projects->isOwnedBy($projectId, $user['id'])){
                 return true;
+            }
+
+            if ($ProjectsUsers->isModeratedBy($projectId, $user['id'])){
+                return true;
+            }
+        } else {
+
+            // Get the ticket id.
+            $ticketId = (int)$this->request->params['pass'][0];
+
+            $ProjectsTickets = TableRegistry::get('ProjectsTickets');
+        
+
+            // Lookup what project this ticket belongs to.
+            $projectId = $ProjectsTickets->find()
+                ->where(['ticket_id' => $ticketId])
+                ->first()['project_id'];
+
+            // The owner of an project can do anything related to it's tickets.
+            if (in_array($this->request->action, ['view', 'edit', 'delete'])){
+                if ($Projects->isOwnedBy($projectId, $user['id'])){
+                    return true;
+                }
+            }
+
+            // A moderator of a project can add and edit tickets.
+            if (in_array($this->request->action, ['add', 'view', 'edit'])){
+                if ($ProjectsUsers->isModeratedBy($projectId, $user['id'])){
+                    return true;
+                }
+            }
+
+            $TicketsUsers = TableRegistry::get('TicketsUsers');
+
+            // Users assigned to tickets can view them.
+            if (in_array($this->request->action, ['view'])){
+                $ticketId = (int)$this->request->params['pass'][0];
+                if ($TicketsUsers->isAssignedTo($ticketId, $user['id'])){
+                    return true;
+                }
             }
         }
 
