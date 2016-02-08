@@ -12,6 +12,69 @@ use Cake\ORM\TableRegistry;
 class TicketsController extends AppController
 {
 
+    //Individual access rules to tickets functions (tickets/*).
+    public function isAuthorized($user)
+    {
+        // All registered users can view the index.
+        if (in_array($this->request->action, ['index'])){
+            return true;
+        }
+
+        $Projects = TableRegistry::get('Projects');
+        $ProjectsUsers = TableRegistry::get('ProjectsUsers');
+
+        if (in_array($this->request->action, ['add'])){
+            $projectId = (int)$this->request->params['pass'][0];
+            
+            if ($Projects->isOwnedBy($projectId, $user['id'])){
+                return true;
+            }
+
+            if ($ProjectsUsers->isModeratedBy($projectId, $user['id'])){
+                return true;
+            }
+        } else {
+
+            // Get the ticket id.
+            $ticketId = (int)$this->request->params['pass'][0];
+
+            $ProjectsTickets = TableRegistry::get('ProjectsTickets');
+        
+
+            // Lookup what project this ticket belongs to.
+            $projectId = $ProjectsTickets->find()
+                ->where(['ticket_id' => $ticketId])
+                ->first()['project_id'];
+
+            // The owner of an project can do anything related to it's tickets.
+            if (in_array($this->request->action, ['view', 'edit', 'delete'])){
+                if ($Projects->isOwnedBy($projectId, $user['id'])){
+                    return true;
+                }
+            }
+
+            // A moderator of a project can add and edit tickets.
+            if (in_array($this->request->action, ['add', 'view', 'edit'])){
+                if ($ProjectsUsers->isModeratedBy($projectId, $user['id'])){
+                    return true;
+                }
+            }
+
+            $TicketsUsers = TableRegistry::get('TicketsUsers');
+
+            // Users assigned to tickets can view them.
+            if (in_array($this->request->action, ['view'])){
+                $ticketId = (int)$this->request->params['pass'][0];
+                if ($TicketsUsers->isAssignedTo($ticketId, $user['id'])){
+                    return true;
+                }
+            }
+        }
+
+        // Otherwise default to Admin -> true, User -> false
+        return parent::isAuthorized($user);
+    }
+
     /**
      * Index method
      *
@@ -81,7 +144,15 @@ class TicketsController extends AppController
             ->where(['id' => $projectId]);
         $this->set('projectId', $projectId);
         $comments = $this->Tickets->Comments->find('list', ['limit' => 200]);
-        $users = $this->Tickets->Users->find('list', ['limit' => 200]);
+        
+        $users = $this->Tickets->Users
+            ->find('list', ['limit' => 200])
+            ->innerJoinWith(
+                'ProjectsUsers', function($q) use( &$projectId){
+                    return $q->where(['ProjectsUsers.project_id' => $projectId]);
+                }
+            );
+        
         $this->set(compact('ticket', 'projects', 'comments', 'users'));
         $this->set('_serialize', ['ticket']);
     }
@@ -114,21 +185,15 @@ class TicketsController extends AppController
         $projectId = $this->Tickets->ProjectsTickets->find()
             ->where(['ticket_id' => $id])
             ->first()['project_id'];
-        debug($id);
-        debug($projectId);
 
-
-        //$ProjectsUsers = TableRegistry::get('ProjectsUsers');
-
+        // Filter users by if they are involved in a project.
         $users = $this->Tickets->Users
-            ->find('list', ['limit' => 200, 'projectId' => $projectId])
+            ->find('list', ['limit' => 200])
             ->innerJoinWith(
-                'ProjectsUsers', function($q){
-                    return $q;//->where(['ProjectsUsers.project_id' => $projectId]);
+                'ProjectsUsers', function($q) use( &$projectId){
+                    return $q->where(['ProjectsUsers.project_id' => $projectId]);
                 }
             );
-
-        debug($users); 
 
         $this->set(compact('ticket', 'projects', 'comments', 'users'));
         $this->set('_serialize', ['ticket']);
