@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * Tickets Controller
@@ -108,7 +109,27 @@ class TicketsController extends AppController
         }
         $projects = $this->Tickets->Projects->find('list', ['limit' => 200]);
         $comments = $this->Tickets->Comments->find('list', ['limit' => 200]);
-        $users = $this->Tickets->Users->find('list', ['limit' => 200]);
+
+        // Get the related project id from the projects_tickets table.
+        $projectId = $this->Tickets->ProjectsTickets->find()
+            ->where(['ticket_id' => $id])
+            ->first()['project_id'];
+        debug($id);
+        debug($projectId);
+
+
+        //$ProjectsUsers = TableRegistry::get('ProjectsUsers');
+
+        $users = $this->Tickets->Users
+            ->find('list', ['limit' => 200, 'projectId' => $projectId])
+            ->innerJoinWith(
+                'ProjectsUsers', function($q){
+                    return $q->where(['ProjectsUsers.project_id' => $projectId]);
+                }
+            );
+
+        debug($users); 
+
         $this->set(compact('ticket', 'projects', 'comments', 'users'));
         $this->set('_serialize', ['ticket']);
     }
