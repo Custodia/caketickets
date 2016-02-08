@@ -41,7 +41,6 @@ class TicketsController extends AppController
         //}
 
         // Users assigned to tickets can view them.
-
         if (in_array($this->request->action, ['view'])){
             $ticketId = (int)$this->request->params['pass'][0];
             if ($TicketsUsers->isAssignedTo($ticketId, $user['id'])){
