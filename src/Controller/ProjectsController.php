@@ -32,7 +32,7 @@ class ProjectsController extends AppController
 
         // Check from the ProjectsUsers table if the person trying to access
         // is a moderator of that project.
-        if (in_array($this->request->action, ['view', 'edit'])){
+        if (in_array($this->request->action, ['view'])){
             $projectId = (int)$this->request->params['pass'][0];
             if ($ProjectsUsers->isModeratedBy($projectId, $user['id'])){
                 return true;
