@@ -124,7 +124,7 @@ class TicketsController extends AppController
             ->find('list', ['limit' => 200, 'projectId' => $projectId])
             ->innerJoinWith(
                 'ProjectsUsers', function($q){
-                    return $q->where(['ProjectsUsers.project_id' => $projectId]);
+                    return $q;//->where(['ProjectsUsers.project_id' => $projectId]);
                 }
             );
 
