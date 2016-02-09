@@ -99,8 +99,21 @@ class TicketsController extends AppController
             ->find('byStatus',['status' =>$status])
             ->find('byTitle',['queries' => $queries]);
 
+        $userId = $this->Auth->user('id');
+
+        $ownerQuery = $searchQuery
+            ->distinct()
+            ->innerJoinWith(
+                'Projects.ProjectsTickets', function($q) use( &$userId){
+                    return $q->where(['Tickets.id = ProjectsTickets.ticket_id'])
+                             ->where(['Projects.id = ProjectsTickets.project_id', ])
+                             ->where(['Projects.user_id' => $userId])
+                             ;
+                }
+            );
+
         // Filter tickets by parameters we got above.
-        $this->set('tickets', $this->paginate($searchQuery));
+        $this->set('tickets', $this->paginate($ownerQuery));
 
         $this->set(compact('tickets'));
         $this->set('_serialize', ['tickets']);

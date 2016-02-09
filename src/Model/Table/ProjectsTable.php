@@ -50,12 +50,16 @@ class ProjectsTable extends Table
         $this->belongsToMany('Tickets', [
             'foreignKey' => 'project_id',
             'targetForeignKey' => 'ticket_id',
-            'joinTable' => 'projects_tickets'
+            'joinTable' => 'projects_tickets',
+            'through' => 'ProjectsTickets'
         ]);
         $this->belongsToMany('Users', [
             'foreignKey' => 'project_id',
             'targetForeignKey' => 'user_id',
             'joinTable' => 'projects_users'
+        ]);
+        $this->hasMany('ProjectsTickets',[
+            'foreignKey' => 'project_id'
         ]);
     }
 

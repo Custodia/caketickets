@@ -58,7 +58,8 @@ class TicketsTable extends Table
         $this->belongsToMany('Projects', [
             'foreignKey' => 'ticket_id',
             'targetForeignKey' => 'project_id',
-            'joinTable' => 'projects_tickets'
+            'joinTable' => 'projects_tickets',
+            'through' => 'ProjectsTickets'
         ]);
         $this->belongsToMany('Comments', [
             'foreignKey' => 'ticket_id',
@@ -69,6 +70,9 @@ class TicketsTable extends Table
             'foreignKey' => 'ticket_id',
             'targetForeignKey' => 'user_id',
             'joinTable' => 'tickets_users'
+        ]);
+        $this->hasMany('ProjectsTickets',[
+            'foreignKey' => 'ticket_id'
         ]);
     }
 
