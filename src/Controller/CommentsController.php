@@ -16,6 +16,12 @@ class CommentsController extends AppController
     public function isAuthorized($user)
     {
 
+        /* Load all the needed tables in a common place.
+         * All queries are lazy so the most this will do
+         * is load the columns of the given table
+         * but even this will be cached automatically by
+         * cakephp
+         */ 
         $Projects = TableRegistry::get('Projects');
         $ProjectsUsers = TableRegistry::get('ProjectsUsers');
         $ProjectsTickets = TableRegistry::get('ProjectsTickets');
