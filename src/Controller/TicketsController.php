@@ -95,11 +95,12 @@ class TicketsController extends AppController
         $queries = $this->request->params['pass'];
         array_shift($queries);
 
+        $searchQuery = $this->Tickets
+            ->find('byStatus',['status' =>$status])
+            ->find('byTitle',['queries' => $queries]);
 
         // Filter tickets by parameters we got above.
-        $this->set('tickets', $this->paginate($this->Tickets
-            ->find('byStatus',['status' =>$status])
-            ->find('byTitle',['queries' => $queries])));
+        $this->set('tickets', $this->paginate($searchQuery));
 
         $this->set(compact('tickets'));
         $this->set('_serialize', ['tickets']);
