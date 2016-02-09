@@ -4,7 +4,6 @@
         <li><?= $this->Html->link(__('Edit Ticket'), ['action' => 'edit', $ticket->id]) ?> </li>
         <li><?= $this->Form->postLink(__('Delete Ticket'), ['action' => 'delete', $ticket->id], ['confirm' => __('Are you sure you want to delete # {0}?', $ticket->id)]) ?> </li>
         <li><?= $this->Html->link(__('List Tickets'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Ticket'), ['action' => 'add']) ?> </li>
         <li><?= $this->Html->link(__('List Projects'), ['controller' => 'Projects', 'action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New Project'), ['controller' => 'Projects', 'action' => 'add']) ?> </li>
         <li><?= $this->Html->link(__('List Comments'), ['controller' => 'Comments', 'action' => 'index']) ?> </li>
@@ -75,6 +74,31 @@
         <?php endif; ?>
     </div>
     <div class="related">
+        <h4><?= __('Related Users') ?></h4>
+        <?php if (!empty($ticket->users)): ?>
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <th><?= __('Id') ?></th>
+                <th><?= __('Username') ?></th>
+                <th><?= __('Email') ?></th>
+                <th><?= __('Role') ?></th>
+                <th class="actions"><?= __('Actions') ?></th>
+            </tr>
+            <?php foreach ($ticket->users as $users): ?>
+            <tr>
+                <td><?= h($users->id) ?></td>
+                <td><?= h($users->username) ?></td>
+                <td><?= h($users->email) ?></td>
+                <td><?= h($users->role) ?></td>
+                <td class="actions">
+                    <?= $this->Html->link(__('View'), ['controller' => 'Users', 'action' => 'view', $users->id]) ?>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </table>
+        <?php endif; ?>
+    </div>
+    <div class="related">
         <h4><?= __('Related Comments') ?></h4>
         <?php if (!empty($ticket->comments)): ?>
         <table cellpadding="0" cellspacing="0">
@@ -95,31 +119,6 @@
                     <?= $this->Html->link(__('View'), ['controller' => 'Comments', 'action' => 'view', $comments->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['controller' => 'Comments', 'action' => 'edit', $comments->id]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['controller' => 'Comments', 'action' => 'delete', $comments->id], ['confirm' => __('Are you sure you want to delete # {0}?', $comments->id)]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
-        <?php endif; ?>
-    </div>
-    <div class="related">
-        <h4><?= __('Related Users') ?></h4>
-        <?php if (!empty($ticket->users)): ?>
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-                <th><?= __('Id') ?></th>
-                <th><?= __('Username') ?></th>
-                <th><?= __('Email') ?></th>
-                <th><?= __('Role') ?></th>
-                <th class="actions"><?= __('Actions') ?></th>
-            </tr>
-            <?php foreach ($ticket->users as $users): ?>
-            <tr>
-                <td><?= h($users->id) ?></td>
-                <td><?= h($users->username) ?></td>
-                <td><?= h($users->email) ?></td>
-                <td><?= h($users->role) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Users', 'action' => 'view', $users->id]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
