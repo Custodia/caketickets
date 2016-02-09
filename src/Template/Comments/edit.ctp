@@ -9,7 +9,6 @@
         ?></li>
         <li><?= $this->Html->link(__('List Comments'), ['action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('List Tickets'), ['controller' => 'Tickets', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Ticket'), ['controller' => 'Tickets', 'action' => 'add']) ?></li>
     </ul>
 </nav>
 <div class="comments form large-9 medium-8 columns content">
