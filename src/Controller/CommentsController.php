@@ -46,7 +46,7 @@ class CommentsController extends AppController
      *
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function add($ticketId)
     {
         $comment = $this->Comments->newEntity();
         if ($this->request->is('post')) {
@@ -59,7 +59,11 @@ class CommentsController extends AppController
                 $this->Flash->error(__('The comment could not be saved. Please, try again.'));
             }
         }
-        $tickets = $this->Comments->Tickets->find('list', ['limit' => 200]);
+        $tickets = $this->Comments->Tickets
+            ->find('list', ['limit' => 200])
+            ->where(['id' => $ticketId]);
+            $this->set('ticketId', $ticketId);
+
         $this->set(compact('comment', 'tickets'));
         $this->set('_serialize', ['comment']);
     }

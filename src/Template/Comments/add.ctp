@@ -12,7 +12,7 @@
         <legend><?= __('Add Comment') ?></legend>
         <?php
             echo $this->Form->input('body');
-            echo $this->Form->input('tickets._ids', ['options' => $tickets]);
+            echo $this->Form->input('tickets._ids', ['options' => $tickets, 'default' => $ticketId]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
