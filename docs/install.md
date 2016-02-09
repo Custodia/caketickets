@@ -1,4 +1,27 @@
+# Installation
+
+## Make the project skeleton
+
+1. Download [Composer](http://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
+2. Run `php composer.phar create-project --prefer-dist cakephp/app caketickets`.
+
+If Composer is installed globally, run
+```bash
+composer create-project --prefer-dist cakephp/app caketickets
+```
+
+## Pull the git repo
+
+```
+git init
+git remote add origin git@github.com:Custodia/caketickets.git
+git fetch
+git checkout -t origin/master
+```
+
 ## Mysql tables
+
+You need to create these SQL tables for the program to work.
 
 ```
 CREATE TABLE users(
@@ -86,4 +109,32 @@ CREATE TABLE tickets_comments (
 	FOREIGN KEY ticket_comment_key(ticket_id) REFERENCES tickets(id),
 	FOREIGN KEY comment_ticket_key(comment_id) REFERENCES comments(id)
 );
+```
+
+You might also want to manually insert a admin user 
+
+```INSERT INTO users (username, email, password, role)
+VALUES (admin, admin@email.com, admin, Admin)```
+
+## Setup config/app.php
+
+### Database settings.
+
+Depends on your personal database settings but example below:
+
+```
+    'Datasources' => [
+        'default' => [
+            'className' => 'Cake\Database\Connection',
+            'driver' => 'Cake\Database\Driver\Mysql',
+            'persistent' => false,
+            'host' => 'localhost',
+            'username' => 'caketicketsadmin',
+            'password' => 'cakestastegood',
+            'database' => 'cake_tickets',
+            'encoding' => 'utf8',
+            'timezone' => 'UTC',
+            'cacheMetadata' => true,
+        ],
+    ]
 ```
