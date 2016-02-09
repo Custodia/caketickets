@@ -12,36 +12,6 @@ class CommentsController extends AppController
 {
 
     /**
-     * Index method
-     *
-     * @return \Cake\Network\Response|null
-     */
-    public function index()
-    {
-        $comments = $this->paginate($this->Comments);
-
-        $this->set(compact('comments'));
-        $this->set('_serialize', ['comments']);
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Comment id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $comment = $this->Comments->get($id, [
-            'contain' => ['Tickets']
-        ]);
-
-        $this->set('comment', $comment);
-        $this->set('_serialize', ['comment']);
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
@@ -54,7 +24,7 @@ class CommentsController extends AppController
             $comment->user_id = $this->Auth->user('id');
             if ($this->Comments->save($comment)) {
                 $this->Flash->success(__('The comment has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => 'Tickets', 'action' => 'view', $ticketId]);
             } else {
                 $this->Flash->error(__('The comment could not be saved. Please, try again.'));
             }
@@ -84,7 +54,7 @@ class CommentsController extends AppController
             $comment = $this->Comments->patchEntity($comment, $this->request->data);
             if ($this->Comments->save($comment)) {
                 $this->Flash->success(__('The comment has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => 'Projects', 'action' => 'index']);
             } else {
                 $this->Flash->error(__('The comment could not be saved. Please, try again.'));
             }
