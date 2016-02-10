@@ -16,6 +16,7 @@
         <li><?= $this->Html->link(__('New Tag'), ['controller' => 'Tags', 'action' => 'add']) ?></li>
         <li class="heading"><?= __('Admin Actions') ?></li>
         <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'adminAdd']) ?></li>
+        <li><?= $this->Html->link(__('Edit User'), ['action' => 'adminEdit', $user->id]) ?> </li>
         <?php endif; ?>
     </ul>
 </nav>
