@@ -85,6 +85,7 @@ Router::scope('/', function ($routes) {
     $routes->connect('/admin/edit/*', ['controller' => 'Users', 'action' => 'adminEdit']);
 
     $routes->connect('/tickets/add/*', ['controller' => 'Tickets', 'action' => 'add']);
+    $routes->connect('/tickets/delete/*', ['controller' => 'Tickets', 'action' => 'delete']);
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */

@@ -37,6 +37,9 @@ class UsersTable extends Table
         $this->hasMany('Projects', [
             'foreignKey' => 'user_id'
         ]);
+        $this->hasMany('ProjectsUsers', [
+            'foreignKey' => 'user_id'
+        ]);
         $this->hasMany('TicketsComments', [
             'foreignKey' => 'user_id'
         ]);

@@ -1,16 +1,24 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
+        <li class="heading"><h3><?= __('Actions') ?></h3></li>
+        <li class="heading"><?= __('Projects') ?></li>
+        <li><?= $this->Html->link(__('List Projects'), ['controller' => 'Projects', 'action' => 'index']) ?> </li>
+        <li><?= $this->Html->link(__('New Project'), ['controller' => 'Projects', 'action' => 'add']) ?></li>
+        <li class="heading"><?= __('Users') ?></li>
+        <li><?= $this->Html->link(__('List Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('Edit User'), ['action' => 'edit', $user->id]) ?> </li>
         <li><?= $this->Form->postLink(__('Delete User'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Users'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Tickets Comments'), ['controller' => 'TicketsComments', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Tickets Comment'), ['controller' => 'TicketsComments', 'action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Projects'), ['controller' => 'Projects', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Project'), ['controller' => 'Projects', 'action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Tickets'), ['controller' => 'Tickets', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Ticket'), ['controller' => 'Tickets', 'action' => 'add']) ?> </li>
+        <li class="heading"><?= __('Tickets') ?></li>
+        <li><?= $this->Html->link(__('List Tickets'), ['controller' => 'Tickets', 'action' => 'index']) ?></li>
+        <?php if($isAdmin): ?>
+        <li class="heading"><?= __('Tags') ?></li>
+        <li><?= $this->Html->link(__('List Tags'), ['controller' => 'Tags', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New Tag'), ['controller' => 'Tags', 'action' => 'add']) ?></li>
+        <li class="heading"><?= __('Admin Actions') ?></li>
+        <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'adminAdd']) ?></li>
+        <li><?= $this->Html->link(__('Edit User'), ['action' => 'adminEdit', $user->id]) ?> </li>
+        <?php endif; ?>
     </ul>
 </nav>
 <div class="users view large-9 medium-8 columns content">
@@ -38,29 +46,6 @@
         </tr>
     </table>
     <div class="related">
-        <h4><?= __('Related Tickets Comments') ?></h4>
-        <?php if (!empty($user->tickets_comments)): ?>
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-                <th><?= __('Ticket Id') ?></th>
-                <th><?= __('Comment Id') ?></th>
-                <th><?= __('User Id') ?></th>
-                <th class="actions"><?= __('Actions') ?></th>
-            </tr>
-            <?php foreach ($user->tickets_comments as $ticketsComments): ?>
-            <tr>
-                <td><?= h($ticketsComments->ticket_id) ?></td>
-                <td><?= h($ticketsComments->comment_id) ?></td>
-                <td><?= h($ticketsComments->user_id) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'TicketsComments', 'action' => 'view', $ticketsComments->ticket_id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'TicketsComments', 'action' => 'edit', $ticketsComments->ticket_id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'TicketsComments', 'action' => 'delete', $ticketsComments->ticket_id], ['confirm' => __('Are you sure you want to delete # {0}?', $ticketsComments->ticket_id)]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
-        <?php endif; ?>
     </div>
     <div class="related">
         <h4><?= __('Related Projects') ?></h4>

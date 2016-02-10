@@ -12,11 +12,23 @@ use Cake\Event\Event;
 class UsersController extends AppController
 {
 
+    public function isAuthorized($user)
+    {
+        if (in_array($this->request->action, ['edit', 'delete'])){
+            $userId = (int)$this->request->params['pass'][0];
+            // Users can edit and delete their own profiles.
+            if ($userId === $user['id']){
+                return true;
+            }
+        }
+
+        return parent::isAuthorized($user);
+    }
 
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        $this->Auth->allow(['add','logout']);
+        $this->Auth->allow(['add','logout','index']);
     }
 
     /**
