@@ -64,8 +64,6 @@ class CommentsController extends AppController
                 ->where(['ticket_id' => $ticketId])
                 ->first()['project_id'];
 
-            debug($ticketId);
-
             // Project owners.
             if ($Projects->isOwnedBy($projectId, $user['id'])){
                 return true;
