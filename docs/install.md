@@ -1,5 +1,21 @@
 # Installation
 
+## Install php necessities
+
+### Debian
+
+```
+sudo apt-get install php5 php5-intl
+```
+
+### Arch
+
+```
+sudo pacman -S php
+```
+
+Then enable the intl extension by modifying your php.ini file.
+
 ## Make the project skeleton
 
 1. Download [Composer](http://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
