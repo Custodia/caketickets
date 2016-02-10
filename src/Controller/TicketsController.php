@@ -106,9 +106,19 @@ class TicketsController extends AppController
             ->innerJoinWith(
                 'Projects.ProjectsTickets', function($q) use( &$userId){
                     return $q->where(['Tickets.id = ProjectsTickets.ticket_id'])
-                             ->where(['Projects.id = ProjectsTickets.project_id', ])
-                             ->where(['Projects.user_id' => $userId])
-                             ;
+                             ->where(['Projects.id = ProjectsTickets.project_id'])
+                             ->where(['Projects.user_id' => $userId]);
+                }
+            );
+
+        $adminQuery = $searchQuery
+            ->distinct()
+            ->innerJoinWith(
+                'ProjectsTickets.ProjectsUsers', function($q) use( &$userId){
+                    return $q->where(['Tickets.id = ProjectsTickets.ticket_id'])
+                             ->where(['ProjectsTickets.project_id = ProjectsUsers.project_id'])
+                             ->where(['ProjectsUsers.user_id' => $userId])
+                             ->where(['ProjectsUsers.role = Admin']);
                 }
             );
 
