@@ -1,5 +1,21 @@
 # Installation
 
+## Install php necessities
+
+### Debian
+
+```
+sudo apt-get install php5 php5-intl php5-mysql
+```
+
+### Arch
+
+```
+sudo pacman -S php
+```
+
+Then enable the intl extension and the mysql extension by modifying your php.ini file.
+
 ## Make the project skeleton
 
 1. Download [Composer](http://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
@@ -10,13 +26,16 @@ If Composer is installed globally, run
 composer create-project --prefer-dist cakephp/app caketickets
 ```
 
-## Pull the git repo
+## Download the changes from github
+
+Do this outside of the caketickets directory.
 
 ```
-git init
-git remote add origin git@github.com:Custodia/caketickets.git
-git fetch
-git checkout -t origin/master
+git clone git@github.com:Custodia/caketickets.git temp
+mv temp/.git code/.git
+rm -rf temp
+git checkout master
+git reset --hard HEAD
 ```
 
 ## Mysql tables
@@ -111,10 +130,7 @@ CREATE TABLE tickets_comments (
 );
 ```
 
-You might also want to manually insert a admin user 
-
-```INSERT INTO users (username, email, password, role)
-VALUES (admin, admin@email.com, admin, Admin)```
+You can't manually insert admin users because the project is set to hash all passwords.
 
 ## Setup config/app.php
 
