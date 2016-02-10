@@ -2,7 +2,7 @@
     <ul class="side-nav">
         <li class="heading"><h3><?= __('Actions') ?></h3></li>
         <li class="heading"><?= __('Projects') ?></li>
-        <li><?= $this->Html->link(__('New Project'), ['action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('New Project'), ['controller' => 'Projects', 'action' => 'add']) ?></li>
         <li class="heading"><?= __('Users') ?></li>
         <li><?= $this->Html->link(__('List Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?></li>
