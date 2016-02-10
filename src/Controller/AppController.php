@@ -93,6 +93,8 @@ class AppController extends Controller
      */
     public function beforeRender(Event $event)
     {
+        $this->set('isAdmin', $this->Auth->user('role') === 'Admin');
+
         if (!array_key_exists('_serialize', $this->viewVars) &&
             in_array($this->response->type(), ['application/json', 'application/xml'])
         ) {
