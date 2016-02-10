@@ -16,8 +16,6 @@ class UsersController extends AppController
     {
         if (in_array($this->request->action, ['edit', 'delete'])){
             $userId = (int)$this->request->params['pass'][0];
-            debug($userId);
-            debug($user['id']);
             // Users can edit and delete their own profiles.
             if ($userId === $user['id']){
                 return true;
